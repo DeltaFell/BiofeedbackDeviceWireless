@@ -14,9 +14,10 @@
 #include <ArduinoBLE.h>
 
 BLEService ledService("19B10000-E8F2-537E-4F6C-D104768A1214"); // BLE LED Service
-
-// BLE LED Switch Characteristic - custom 128-bit UUID, read and writable by central
+// BLEService ledService2("put uuid here later");
+BLE LED Switch Characteristic - custom 128-bit UUID, read and writable by central
 BLEByteCharacteristic switchCharacteristic("19B10001-E8F2-537E-4F6C-D104768A1214", BLERead | BLEWrite);
+BLEByteCharacteristic switchCharacteristic2("put uuid here later");
 
 const int ledPin = LED_BUILTIN; // pin to use for the LED
 
@@ -40,12 +41,14 @@ void setup() {
 
   // add the characteristic to the service
   ledService.addCharacteristic(switchCharacteristic);
+  //ledService.addCharacteristic(switchCharacteristic2);
 
   // add service
   BLE.addService(ledService);
 
   // set the initial value for the characeristic:
   switchCharacteristic.writeValue(0);
+  switchCharacteristic2.writeValue(0);
 
   // start advertising
   BLE.advertise();
