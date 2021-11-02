@@ -100,7 +100,7 @@ void controlLed(BLEDevice peripheral) {
     // while the peripheral is connected
 
     // read the button pin
-    int buttonState = digitalRead(buttonPin);
+    int buttonState = !digitalRead(buttonPin);
 
     if (oldButtonState != buttonState) {
       // button changed
