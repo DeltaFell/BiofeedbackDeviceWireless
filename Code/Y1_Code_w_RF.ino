@@ -1,6 +1,9 @@
 #include<SD.h>
 #include"RTClib.h"
 #include"pitches.h"
+#include <SPI.h>
+#include <nRF24L01.h>
+#include <RF24.h>
 
 #define SD_CARD 4
 #define LED_1 A3
@@ -22,6 +25,21 @@ int num_heel_strikes = 0;
 int num_toe_lifts = 0;
 int num_gaits = 0;
 
+//create an RF24 object
+int CE = 0;
+int CSN =1;
+RF24 radio(CE, CSN);  // CE, CSN
+//address through which two modules communicate.
+const byte address[6] = "00001";
+const int channel = 100;
+const char msg[] = "yes";
+int ledPin = 8;
+const int buttonPin = 2;
+const int ledOut = 3;
+const int ledOut2 = 4;
+const int ledOut3 = 5;
+bool text[4] = {0,0,0,0};
+
 File data_file;
 
 RTC_PCF8523 rtc;
@@ -30,6 +48,17 @@ void setup() {
   Serial.begin(9600);
 
   //Set up the pins, for the leds and buzzer
+  radio.begin();
+  
+  //set the address
+  radio.openReadingPipe(0, address);
+  //set the channel
+  radio.setChannel(channel);
+   //Set module as receiver
+  radio.startListening();
+  pinMode(buttonPin, INPUT);
+  pinMode(buttonOut, OUTPUT);
+  
   pinMode(LED_1, OUTPUT);
   pinMode(LED_2, OUTPUT);
   pinMode(LED_3, OUTPUT);
